@@ -9,7 +9,6 @@ const roleSchema = new Schema({
         unique: true,
         uppercase: true,
         enum: ['ADMIN_ROLE', 'CLIENT_ROLE'],
-        default: 'CLIENT_ROLE'
     },
     isActive: { 
         type: Boolean, 
