@@ -6,7 +6,7 @@ import { createClient, getClients, updateClient } from "./user.controller.js";
 const router = Router();
 
 // Rutas para el Administrador
-router.post('/add', createClient);
+router.post('/', createClient);          // ← cambio aquí
 router.get('/', getClients);
 router.put('/update/:id', updateClient);
 
