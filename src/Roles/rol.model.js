@@ -7,8 +7,8 @@ const roleSchema = new Schema({
         type: String, 
         required: [true, 'El nombre del rol es obligatorio'],
         unique: true,
-        uppercase: true,
-        enum: ['ADMIN_ROLE', 'CLIENT_ROLE'],
+        uppercase: true,  // asegura que se guarde en mayúsculas
+        enum: ['ADMIN_ROLE', 'CLIENT_ROLE'], // solo estos dos valores
     },
     isActive: { 
         type: Boolean, 
