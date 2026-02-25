@@ -1,18 +1,58 @@
-const mongoose = require('mongoose');
-const MONGO_URI = 'mongodb://admin:password123@localhost:27017/sistema_bancario?authSource=admin';
+'use strict';
 
-const conectarDB = async () => {
+import mongoose from 'mongoose';
+
+export const dbConnection = async () => {
     try {
-        await mongoose.connect(MONGO_URI);
-        console.log('Conexión a MongoDB establecida exitosamente.');
+        mongoose.connection.on('error', (error) => {
+            console.log('MongoDB | error de conexión:', error.message);
+            mongoose.disconnect();
+        });
+
+        mongoose.connection.on('connecting', () => {
+            console.log('MongoDB | intentando conectar...');
+        });
+
+        mongoose.connection.on('connected', () => {
+            console.log('MongoDB | conexión establecida');
+        });
+
+        mongoose.connection.on('open', () => {
+            console.log('MongoDB | base de datos BancoKinalitos lista');
+        });
+
+        mongoose.connection.on('reconnected', () => {
+            console.log('MongoDB | reconectado');
+        });
+
+        mongoose.connection.on('disconnected', () => {
+            console.log('MongoDB | desconectado');
+        });
+
+        await mongoose.connect(process.env.URL_MONGODB, {
+            serverSelectionTimeoutMS: 5000,
+            maxPoolSize: 20
+        });
+
     } catch (error) {
-        console.error('Error al intentar conectar con MongoDB:', error.message);
+        console.log('Error al conectar la base de datos:', error.message);
         process.exit(1);
     }
 };
 
-conectarDB();
+const gracefulShutdown = async (signal) => {
+    console.log(`MongoDB | cerrando conexión por ${signal}`);
 
-// Levanta el contenedor de la base de datos ejecutando: docker-compose up -d
-// Verificar que el contenedor esté corriendo con: docker ps
-// Ejecutar script de prueba con: node index.js
+    try {
+        await mongoose.connection.close();
+        console.log('MongoDB | conexión cerrada correctamente');
+        process.exit(0);
+    } catch (error) {
+        console.log('MongoDB | error al cerrar conexión:', error.message);
+        process.exit(1);
+    }
+};
+
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGUSR2', () => gracefulShutdown('SIGUSR2'));
