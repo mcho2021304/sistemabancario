@@ -1,82 +1,77 @@
-import Deposit from "./deposit.model.js";
+import Transfer from "./transfers.model.js";
 
 // READ
-export const getDeposits = async (req, res) => {
+export const getTransfers = async (req, res) => {
     try {
         const { page = 1, limit = 10 } = req.query;
         const skip = (parseInt(page) - 1) * parseInt(limit);
-        const deposits = await Deposit
+        const transfers = await Transfer
             .find()
             .limit(parseInt(limit))
             .skip(skip)
             .sort({ createdAt: -1 })
-            .populate('account', 'accountNumber holderName');
-        const total = await Deposit.countDocuments();
-
+            .populate('senderAccount', 'accountNumber holderName')
+            .populate('receiverAccount', 'accountNumber holderName');
+        const total = await Transfer.countDocuments();
         res.status(200).json({
             success: true,
-            data: deposits,
-            pagination: {
-                currentPage: page,
-                totalPages: Math.ceil(total / limit),
-                totalRecords: total
-            }
+            data: transfers,
+            pagination: { totalRecords: total }
         });
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: "Error al obtener depósitos",
+            message: "Error al obtener transferencias",
             error: error.message
         });
     }
 };
 
 // CREATE
-export const createDeposit = async (req, res) => {
+export const createTransfer = async (req, res) => {
     try {
-        const deposit = new Deposit(req.body);
-        await deposit.save();
+        const transfer = new Transfer(req.body);
+        await transfer.save();
         res.status(201).json({
             success: true,
-            message: 'Depósito creado',
-            data: deposit
+            message: 'Transferencia realizada',
+            data: transfer
         });
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: 'Error al crear depósito',
+            message: 'Error al transferir',
             error: error.message
         });
     }
 };
 
 // UPDATE
-export const updateDeposit = async (req, res) => {
+export const updateTransfer = async (req, res) => {
     try {
         const { id } = req.params;
-        const updatedDeposit = await Deposit.findByIdAndUpdate(id, req.body, { new: true });
+        const updatedTransfer = await Transfer.findByIdAndUpdate(id, req.body, { new: true });
         res.status(200).json({
             success: true,
-            message: 'Depósito actualizado',
-            data: updatedDeposit
+            data: updatedTransfer
         });
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: 'Error al actualizar',
+            message: 'Error al editar transferencia',
             error: error.message
         });
     }
 };
 
 // DELETE
-export const deleteDeposit = async (req, res) => {
+export const deleteTransfer = async (req, res) => {
     try {
         const { id } = req.params;
-        await Deposit.findByIdAndDelete(id);
+        await Transfer.findByIdAndDelete(id);
         res.status(200).json({
             success: true,
-            message: 'Depósito eliminado correctamente'
+            message: 'Transferencia eliminada'
         });
     } catch (error) {
         res.status(500).json({
