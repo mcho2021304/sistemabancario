@@ -6,18 +6,24 @@ import {
     deleteTransfer
 } from "./transfers.controller.js";
 
+import {
+    validateCreateTransfer,
+    validateTransferId,
+    validateTransferUpdate
+} from "../../middlewares/transfer-validators.js";
+
 const router = Router();
 
-// Rutas GET
+// GET
 router.get("/", getTransfers);
 
-// Rutas POST
-router.post('/', createTransfer);
+// POST
+router.post("/", validateCreateTransfer, createTransfer);
 
-// Rutas PUT
-router.put('/:id', updateTransfer);
+// PUT
+router.put("/:id", validateTransferUpdate, updateTransfer);
 
-// Rutas DELETE
-router.delete('/:id', deleteTransfer);
+// DELETE
+router.delete("/:id", validateTransferId, deleteTransfer);
 
 export default router;
