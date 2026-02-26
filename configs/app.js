@@ -16,6 +16,12 @@ import { errorHandler } from '../middlewares/handle-errors.js';
 import userRoutes from '../src/users/user.routes.js';
 import roleRoutes from '../src/Roles/rol.routes.js';
 import serviceRoutes from '../src/services/service.routes.js';
+import transactionRoutes from '../src/transactions/transactions.routes.js';
+import paymentRoutes from '../src/payments/payment.routes.js';
+import transfersRoutes from '../src/transfers/transfers.routes.js';
+import depositsRoutes from '../src/deposits/deposit.routes.js';
+import currentRoutes from '../src/currencies/currency.routes.js';
+import accountRoutes from '../src/accounts/account.routes.js';
 
 const BASE_URL = '/bank/v1';
 
@@ -34,6 +40,12 @@ const routes = (app) => {
     app.use(`${BASE_URL}/users`, userRoutes);
     app.use(`${BASE_URL}/Roles`, roleRoutes);
     app.use(`${BASE_URL}/services`, serviceRoutes);
+    app.use(`${BASE_URL}/transactions`, transactionRoutes);
+    app.use(`${BASE_URL}/payments`, paymentRoutes);
+    app.use(`${BASE_URL}/transfers`, transfersRoutes);
+    app.use(`${BASE_URL}/deposits`, depositsRoutes);
+    app.use(`${BASE_URL}/accounts`, accountRoutes);
+    app.use(`${BASE_URL}/currencies`, currentRoutes);
 };
 
 // Inicializar servidor
