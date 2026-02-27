@@ -1,4 +1,5 @@
 import Deposit from "./deposit.model.js";
+import User from "../users/user.model.js";
 
 // READ
 export const getDeposits = async (req, res) => {
@@ -34,12 +35,31 @@ export const getDeposits = async (req, res) => {
 // CREATE
 export const createDeposit = async (req, res) => {
     try {
+        const { account, amount } = req.body;
+
+        // Guardar el registro del depósito
         const deposit = new Deposit(req.body);
         await deposit.save();
+
+        // BUSCAR AL USUARIO Y SUMAR EL SALDO
+        const updatedUser = await User.findByIdAndUpdate(
+            account, 
+            { $inc: { balance: amount } }, 
+            { new: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({
+                success: false,
+                message: 'No se pudo actualizar el saldo: Usuario no encontrado'
+            });
+        }
+
         res.status(201).json({
             success: true,
-            message: 'Depósito creado',
-            data: deposit
+            message: 'Depósito creado y saldo actualizado',
+            data: deposit,
+            newBalance: updatedUser.balance 
         });
     } catch (error) {
         res.status(500).json({

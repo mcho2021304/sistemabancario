@@ -11,6 +11,7 @@ import { dbConnection } from './db.js';
 import { helmetConfiguration } from './helmet-configuration.js';
 import { requestLimit } from '../middlewares/request-limit.js';
 import { errorHandler } from '../middlewares/handle-errors.js';
+import { initializeAdmin } from '../src/users/user.setup.js'; 
 
 // Rutas del sistema bancario
 import userRoutes from '../src/users/user.routes.js';
@@ -55,6 +56,8 @@ const initServer = async (app) => {
 
     try {
         await dbConnection();
+        await initializeAdmin(); 
+        
         middlewares(app);
         routes(app);
         app.use(errorHandler);

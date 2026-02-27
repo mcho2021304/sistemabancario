@@ -10,29 +10,33 @@ export const validateJwt = async (req, res, next) => {
         if (!token) {
             return res.status(401).json({
                 success: false,
-                message: 'Token requerido'
+                message: 'Token requerido para acceder a este recurso'
             })
         }
 
-        token = token.replace('Bearer ', '')
+        // Limpiamos token si viene con el prefijo 'Bearer '
+        token = token.replace(/^Bearer\s+/, '')
 
+        // Verificamos el token con la llave del .env
         const decoded = jwt.verify(token, process.env.SECRET_KEY)
 
-        const user = await User.findById(decoded.uid)
-        if (!user) {
+        const user = await User.findById(decoded.id) 
+        
+        if (!user || !user.isActive) {
             return res.status(404).json({
                 success: false,
-                message: 'Usuario no encontrado'
+                message: 'Usuario no encontrado o cuenta desactivada'
             })
         }
 
-        req.user = { id: user._id }
+        // Inyectamos el usuario completo en la petición
+        req.user = user 
         next()
 
     } catch (error) {
         return res.status(401).json({
             success: false,
-            message: 'Token inválido'
+            message: 'Token inválido o sesión expirada'
         })
     }
 }

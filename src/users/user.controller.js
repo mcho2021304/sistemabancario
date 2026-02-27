@@ -1,3 +1,4 @@
+import { generateJwt } from '../../utils/jwt.js';
 import User from './user.model.js';
 import bcrypt from 'bcryptjs';
 
@@ -65,7 +66,7 @@ export const getClients = async (req, res) => {
     } catch (error) {
         res.status(500).json({ success: false, message: 'Error al obtener clientes', error });
     }
-};
+}
 
 // Actualizar Cliente 
 export const updateClient = async (req, res) => {
@@ -85,4 +86,54 @@ export const updateClient = async (req, res) => {
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
-};
+}
+    
+    export const login = async (req, res) => {
+    try {
+        const { username, password } = req.body;
+
+        // 1. Buscar al usuario por username o email
+        const user = await User.findOne({
+            $or: [{ username: username }, { email: username }]
+        });
+
+        // 2. Verificar existencia y contraseña
+        if (user && bcrypt.compareSync(password, user.password)) {
+            
+            // 3. Crear el payload para el token
+            const loggedUser = {
+                id: user._id,
+                username: user.username,
+                role: user.role
+            };
+
+            // 4. Generar el Token JWT
+            const token = await generateJwt(loggedUser);
+
+            return res.status(200).json({
+                success: true,
+                message: `Bienvenido de nuevo, ${user.name}`,
+                user: {
+                    uid: user._id,
+                    username: user.username,
+                    role: user.role
+                },
+                token
+            });
+        }
+
+        // Si fallan las credenciales
+        return res.status(401).json({
+            success: false,
+            message: 'Usuario o contraseña incorrectos'
+        });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: 'Error al intentar iniciar sesión',
+            error: error.message
+        });
+    }
+}

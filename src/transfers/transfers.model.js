@@ -5,12 +5,12 @@ import mongoose from 'mongoose';
 const transferSchema = new mongoose.Schema({
     senderAccount: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Account',
+        ref: 'User',
         required: [true, 'La cuenta de origen es obligatoria']
     },
     receiverAccount: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Account',
+        ref: 'User',
         required: [true, 'La cuenta de destino es obligatoria']
     },
     amount: {

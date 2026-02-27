@@ -3,7 +3,8 @@ import {
     getTransfers,
     createTransfer,
     updateTransfer,
-    deleteTransfer
+    deleteTransfer,
+    getTransfersByUser 
 } from "./transfers.controller.js";
 
 import {
@@ -12,10 +13,13 @@ import {
     validateTransferUpdate
 } from "../../middlewares/transfer-validators.js";
 
+import { validateJwt } from "../../middlewares/validate-jwt.js"; 
+
 const router = Router();
 
 // GET
 router.get("/", getTransfers);
+router.get('/history/:uid', [validateJwt], getTransfersByUser);
 
 // POST
 router.post("/", validateCreateTransfer, createTransfer);
