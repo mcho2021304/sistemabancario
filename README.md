@@ -1,59 +1,34 @@
-Sistema Bancario
-Descripción
+# 🏦 SistemaBancario-Admin
 
-Sistema Bancario es un proyecto que permite gestionar operaciones básicas de un banco de manera segura. Los usuarios pueden iniciar sesión, realizar depósitos, transferencias y consultar su historial de transacciones.
+## 🏦 SistemaBancario-Admin
 
-Funcionalidades
+### 🚀 Requerimientos del Sistema
 
-Inicio de sesión con obtención de token de autenticación.
+#### 📄 API de Gestión Bancaria de Usuarios, Cuentas y Transacciones
 
-Realizar depósitos en la cuenta del usuario.
+---
 
-Transferencias entre cuentas dentro del sistema.
+## 🌐 1. Descripción General del Sistema
 
-Consultar el historial de transacciones de un usuario específico.
+El Sistema Bancario es una aplicación backend que permite gestionar operaciones bancarias básicas de manera segura y eficiente.
 
-Tecnologías utilizadas
+Los usuarios pueden:
 
-Node.js para la lógica del backend.
+- 🔐 Iniciar sesión  
+- 💰 Realizar depósitos  
+- 🔄 Hacer transferencias  
+- 📄 Consultar su historial de transacciones  
 
-Base de datos (por definir según el proyecto).
+---
 
-Librerías adicionales para autenticación y manejo de datos.
+## ✨ 2. Funcionalidades
 
-Instalación
+### 🔑 Autenticación
+- Inicio de sesión con generación de token.
 
-Clona el repositorio:
+### 💵 Operaciones
+- Depósitos en cuenta.
+- Transferencias entre cuentas.
 
-git clone <URL-del-repositorio>
-
-Instala las dependencias:
-
-npm install
-
-Configura las variables de entorno necesarias (como la conexión a la base de datos y secret tokens).
-
-Ejecuta el proyecto:
-
-npm start
-Uso
-
-Inicia sesión con tu usuario y contraseña.
-
-Obtén tu token de autenticación.
-
-Realiza depósitos o transferencias según tus necesidades.
-
-Consulta el historial de transacciones para verificar operaciones previas.
-
-Contribución
-
-Para contribuir:
-
-Haz un fork del repositorio.
-
-Crea una nueva rama para tus cambios (git checkout -b feature/nueva-funcionalidad).
-
-Realiza tus cambios y haz commit.
-
-Envía un pull request describiendo tus mejoras.
+### 📊 Historial
+- Consulta de transacciones por usuario.
