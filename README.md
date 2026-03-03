@@ -1,6 +1,6 @@
-# 🏦 SistemaBancario-Admin
+# 🏦 SistemaBancario
 
-## 🏦 SistemaBancario-Admin
+## 🏦 SistemaBancario
 
 ### 🚀 Requerimientos del Sistema
 
